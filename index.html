@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel de Estudos</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"> 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -19,15 +21,34 @@
       </div>
     </header>
 
-    <!-- Registro de Aula -->
+    <section class="points">
+      <h2>⭐ Pontos: <span id="points">0</span></h2>
+    </section>
+
+    <section class="timer">
+      <h2>⏱️ Tempo de Estudo</h2>
+      <p id="display">00:00:00</p>
+      <div class="timer-controls">
+        <button id="start">Iniciar</button>
+        <button id="stop">Parar</button>
+      </div>
+      <h3>⏰ Tempo total estudado: <span id="totalTime">0 min</span></h3>
+    </section>
+
+    <section class="chart-section">
+      <h2>📊 Tempo Estudado (Últimos 7 dias)</h2>
+      <canvas id="studyChart"></canvas>
+    </section>
+    
     <section class="study-inputs">
+      <h2>📒 Registrar Aula</h2>
       <input type="text" id="aula" placeholder="Número da aula">
       <input type="text" id="capitulo" placeholder="Capítulo">
       <button id="save">Salvar Aula</button>
     </section>
 
-    <!-- Filtro -->
     <section class="filters">
+      <label for="filter">Filtrar Aulas:</label>
       <select id="filter">
         <option value="todas">Todas</option>
         <option value="pendentes">Pendentes</option>
@@ -35,45 +56,24 @@
       </select>
     </section>
 
-    <!-- Lista de progresso -->
     <section class="progress-section">
-      <h2>📖 Aulas</h2>
+      <h2>📖 Aulas Registradas</h2>
       <ul id="progressList"></ul>
     </section>
 
-    <!-- Timer -->
-    <section class="timer">
-      <h2>⏱️ Tempo de Estudo</h2>
-      <p id="display">00:00:00</p>
-      <button id="start">Iniciar</button>
-      <button id="stop">Parar</button>
-      <h3>⏰ Tempo total estudado: <span id="totalTime">0 min</span></h3>
-    </section>
-
-    <!-- Pontos -->
-    <section class="points">
-      <h2>⭐ Pontos: <span id="points">0</span></h2>
-    </section>
-
-    <!-- Gráfico -->
-    <section class="chart-section">
-      <h2>📊 Tempo Estudado (Últimos 7 dias)</h2>
-      <canvas id="studyChart"></canvas>
-    </section>
-
-    <!-- Anotações -->
     <section class="notes-section">
       <h2>📝 Anotações</h2>
       <textarea id="noteText" placeholder="Escreva algo importante sobre a aula..."></textarea>
-      <button id="saveNote">Salvar Anotação</button>
-      <button id="exportNotes">📤 Exportar PDF</button>
+      <div class="note-controls">
+        <button id="saveNote">Salvar Anotação</button>
+        <button id="exportNotes">📤 Exportar PDF</button>
+      </div>
       <div id="savedNotes"></div>
     </section>
 
-    <!-- Ranking -->
     <section class="ranking">
       <h2>🏆 Ranking</h2>
-      <ul id="rankingList"></ul>
+      <ul id="rankingList"><li>Ranking futuro...</li></ul>
     </section>
   </div>
 
