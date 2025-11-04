@@ -1,86 +1,121 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Painel de Estudos</title>
-  <link rel="stylesheet" href="style.css"> 
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>📚 Meu Painel de Estudos</h1>
 
-      <div class="auth-area">
+      <div class="header-right">
+        <!-- Perfil / login -->
+        <div id="userBlock" class="user-block" style="display:none">
+          <img id="userPhoto" alt="foto" />
+          <span id="userName"></span>
+        </div>
+
         <button id="btnSignIn">🔐 Entrar com Google</button>
-        <button id="btnSignOut" style="display:none;">🚪 Sair</button>
+        <button id="btnSignOut" style="display:none">🚪 Sair</button>
         <button id="toggleTheme">🌙 Modo Escuro</button>
       </div>
     </header>
 
-    <section class="points">
-      <h2>⭐ Pontos: <span id="points">0</span></h2>
-    </section>
+    <main class="grid">
+      <section class="card">
+        <h2>📝 Nova Aula</h2>
+        <input id="aula" placeholder="Número da aula">
+        <input id="capitulo" placeholder="Capítulo">
+        <button id="save">Salvar Aula</button>
 
-    <section class="timer">
-      <h2>⏱️ Tempo de Estudo</h2>
-      <p id="display">00:00:00</p>
-      <div class="timer-controls">
-        <button id="start">Iniciar</button>
-        <button id="stop">Parar</button>
-      </div>
-      <h3>⏰ Tempo total estudado: <span id="totalTime">0 min</span></h3>
-    </section>
+        <div class="filter-row">
+          <select id="filter">
+            <option value="todas">Todas</option>
+            <option value="pendentes">Pendentes</option>
+            <option value="concluidas">Concluídas</option>
+          </select>
+          <button id="exportJson">Exportar JSON</button>
+          <button id="exportCsv">Exportar CSV</button>
+        </div>
 
-    <section class="chart-section">
-      <h2>📊 Tempo Estudado (Últimos 7 dias)</h2>
-      <canvas id="studyChart"></canvas>
-    </section>
-    
-    <section class="study-inputs">
-      <h2>📒 Registrar Aula</h2>
-      <input type="text" id="aula" placeholder="Número da aula">
-      <input type="text" id="capitulo" placeholder="Capítulo">
-      <button id="save">Salvar Aula</button>
-    </section>
+        <h3>📖 Aulas</h3>
+        <ul id="progressList"></ul>
+      </section>
 
-    <section class="filters">
-      <label for="filter">Filtrar Aulas:</label>
-      <select id="filter">
-        <option value="todas">Todas</option>
-        <option value="pendentes">Pendentes</option>
-        <option value="concluidas">Concluídas</option>
-      </select>
-    </section>
+      <section class="card">
+        <h2>⏱️ Tempo de Estudo</h2>
+        <p id="display">00:00:00</p>
+        <div class="row">
+          <button id="start">Iniciar</button>
+          <button id="stop">Parar</button>
+        </div>
+        <h3>⏰ Tempo total estudado: <span id="totalTime">0 min</span></h3>
 
-    <section class="progress-section">
-      <h2>📖 Aulas Registradas</h2>
-      <ul id="progressList"></ul>
-    </section>
+        <div class="meta">
+          <label>Meta diária (min): <input id="dailyGoal" type="number" min="0" placeholder="ex: 120"></label>
+          <div class="progress-bar"><div id="goalProgress"></div></div>
+        </div>
 
-    <section class="notes-section">
-      <h2>📝 Anotações</h2>
-      <textarea id="noteText" placeholder="Escreva algo importante sobre a aula..."></textarea>
-      <div class="note-controls">
+        <hr/>
+
+        <h3>🍅 Pomodoro</h3>
+        <div class="pomodoro">
+          <div id="pomodoroDisplay">25:00</div>
+          <div class="row">
+            <button id="startPom">Iniciar Pomodoro</button>
+            <button id="stopPom">Parar</button>
+            <button id="skipPom">Pular</button>
+          </div>
+          <small id="pomState">Estado: pronto</small>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>🗂️ Notas por Aula</h2>
+        <select id="selectAulaForNote"></select>
+        <textarea id="noteText" placeholder="Escreva uma nota..."></textarea>
         <button id="saveNote">Salvar Anotação</button>
-        <button id="exportNotes">📤 Exportar PDF</button>
-      </div>
-      <div id="savedNotes"></div>
-    </section>
+        <div id="savedNotes"></div>
+      </section>
 
-    <section class="ranking">
-      <h2>🏆 Ranking</h2>
-      <ul id="rankingList"><li>Ranking futuro...</li></ul>
-    </section>
+      <section class="card">
+        <h2>📊 Estatísticas</h2>
+        <canvas id="studyChart"></canvas>
+        <h3>⭐ Pontos: <span id="points">0</span></h3>
+        <div id="achievements" class="achievements"></div>
+      </section>
+
+      <section class="card">
+        <h2>🏆 Ranking</h2>
+        <ul id="rankingList"></ul>
+      </section>
+
+      <section class="card">
+        <h2>📜 Histórico de Sessões</h2>
+        <ul id="sessionHistory"></ul>
+      </section>
+
+      <section class="card">
+        <h2>🗒️ Anotações Gerais</h2>
+        <textarea id="generalNote" placeholder="Anotação geral..."></textarea>
+        <button id="saveGeneralNote">Salvar</button>
+        <div id="generalNotesList"></div>
+      </section>
+    </main>
+
+    <footer>
+      <small>💡 Feito por Vitor Melo</small>
+    </footer>
   </div>
 
-  <!-- Script principal -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
+
 
 
 
