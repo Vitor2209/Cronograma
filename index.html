@@ -11,7 +11,12 @@
   <div class="container">
     <header>
       <h1>📚 Meu Painel de Estudos</h1>
-      <button id="toggleTheme">🌙 Modo Escuro</button>
+
+      <div class="auth-area">
+        <button id="btnSignIn">🔐 Entrar com Google</button>
+        <button id="btnSignOut" style="display:none;">🚪 Sair</button>
+        <button id="toggleTheme">🌙 Modo Escuro</button>
+      </div>
     </header>
 
     <!-- Registro de Aula -->
@@ -72,9 +77,11 @@
     </section>
   </div>
 
-  <script src="script.js"></script>
+  <!-- Script principal -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
+
 
 
 

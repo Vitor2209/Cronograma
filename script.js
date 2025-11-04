@@ -1,3 +1,74 @@
+// === LOGIN COM GOOGLE (Firebase) ===
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+// Configuração do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyA5DVcPBD0rVIPb5wrT2lX33Tm2nL3Yuxg",
+  authDomain: "painelestudos-aa3ce.firebaseapp.com",
+  projectId: "painelestudos-aa3ce",
+  storageBucket: "painelestudos-aa3ce.appspot.com",
+  messagingSenderId: "345651228873",
+  appId: "1:345651228873:web:d25d3fa527d726be009d18",
+  measurementId: "G-2RE102BQVZ"
+};
+
+// Inicializa Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// Botões do login
+const btnSignIn = document.getElementById("btnSignIn");
+const btnSignOut = document.getElementById("btnSignOut");
+
+// Login com popup
+btnSignIn.addEventListener("click", async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    alert(`Bem-vindo, ${user.displayName}!`);
+    btnSignIn.style.display = "none";
+    btnSignOut.style.display = "inline-block";
+  } catch (error) {
+    console.error("Erro no login:", error);
+    alert("Erro no login: " + error.message);
+  }
+});
+
+// Logout
+btnSignOut.addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+    alert("Você saiu da conta!");
+    btnSignOut.style.display = "none";
+    btnSignIn.style.display = "inline-block";
+  } catch (error) {
+    console.error("Erro ao sair:", error);
+  }
+});
+
+// Monitora login automático
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    btnSignIn.style.display = "none";
+    btnSignOut.style.display = "inline-block";
+    console.log("Usuário logado:", user.email);
+  } else {
+    btnSignIn.style.display = "inline-block";
+    btnSignOut.style.display = "none";
+  }
+});
+
+
+
+// === SEU CÓDIGO ORIGINAL ABAIXO (inalterado) ===
 let startTime, timerInterval;
 let totalSeconds = 0;
 let points = parseInt(localStorage.getItem('pontos')) || 0;
